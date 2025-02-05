@@ -1,8 +1,12 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace Newsletter.Models;
 
 public class Subscriber
 {
-    public required string Id { get; set; }   // Unique identifier for the subscriber
-    public string? Name { get; set; }        // Name of the subscriber
-    public required string Email { get; set; } // Email of the subscriber
+    public string? Id { get; set; }
+    [Required]
+    public string? Name { get; set; }
+    [Required, EmailAddress]
+    public string? Email { get; set; }
 }
