@@ -7,18 +7,43 @@ public class NewsletterController : Controller
 {
     public IActionResult Index()
     {
-        // Generate a mock subscriber for demonstration
+        // Create a subscriber object and pass it to the view
         var subscriber = new Subscriber
         {
-            Id = Guid.NewGuid().ToString(), // Generate unique GUID
+            Id = Guid.NewGuid().ToString(),
             Name = "John Doe",
             Email = "john.doe@email.com"
         };
-        
-        // Log the creation of the subscriber (for debugging)
         Console.WriteLine($"Subscriber {subscriber.Name}, {subscriber.Email} with ID: {subscriber.Id} created");
+        return View(subscriber);
+    }
 
-        // Pass the subscriber to the view
+    [HttpGet]
+    public IActionResult Subscribe()
+    {
+        return View(new Subscriber());
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Subscribe(Subscriber subscriber)
+    {
+        // Validate the model state
+        if (ModelState.IsValid)
+        {
+            // Log the subscriber details
+            Console.WriteLine($"Name: {subscriber.Name}, Email: {subscriber.Email}");
+
+            // TODO: Implement the subscription logic
+            await Task.Delay(100); // Simulate an operation
+
+            // Set a result message in TempData in order to display it in the view
+            TempData["SuccessMessage"] = "You have successfully subscribed to our newsletter!";
+
+            // Redirect back to the Subscribe GET action to clear the form
+            return RedirectToAction("Subscribe");
+        }
+
+        // If the model state is invalid, redisplay the form with validation errors
         return View(subscriber);
     }
 }
